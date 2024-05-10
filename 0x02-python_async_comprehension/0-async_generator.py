@@ -7,7 +7,7 @@ import random
 from typing import AsyncGenerator, Union
 
 
-async def async_generator() -> Union[AsyncGenerator[float, None], None] :
+async def async_generator() -> Union[AsyncGenerator[float, None], None]:
     """
     The coroutine will loop 10 times, each time asynchronously wait 1 second,
     then yield a random number between 0 and 10 useing the random module.
