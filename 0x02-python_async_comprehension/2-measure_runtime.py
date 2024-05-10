@@ -3,7 +3,7 @@
 Messure the runtime of the async_comprehension function
 """
 import asyncio
-from time import perf_counter
+from time import time
 from typing import Callable, List
 
 
@@ -17,6 +17,6 @@ async def measure_runtime() -> float:
     Measure the runtime of the async_comprehension function, after
     executing it 4 times in parallel.
     """
-    start: float = perf_counter()
-    await asyncio.gather( *[async_comprehension() for _ in range(4)])
-    return perf_counter() - start
+    start: float = time()
+    await asyncio.gather(*[async_comprehension() for _ in range(4)])
+    return time() - start
