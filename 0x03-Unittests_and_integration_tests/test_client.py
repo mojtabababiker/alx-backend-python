@@ -82,7 +82,7 @@ class TestGithubOrgClient(unittest.TestCase):
 class TestIntegrationGithubOrgClient(unittest.TestCase):
     """An intergration test for the GithubOrgClient class"""
     @classmethod
-    def setupClass(cls):
+    def setUpClass(cls):
         """setup the patcher and the other environment for test"""
         def side_effect(url: str) -> Dict:
             """Returns he correct fixtures for the various values of url
@@ -94,11 +94,24 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             res.json.return_value = org_payload
             return res
 
-        get_patcher = patch("requests.get", side_effect=side_effect)
-        TestIntegrationGithubOrgClient.get_patcher = get_patcher
-        TestIntegrationGithubOrgClient.get_patcher.start()
+        get_patcher = patch("utils.requests.get", side_effect=side_effect)
+        TestIntegrationGithubOrgClient.get_patcher = get_patcher.start()
+        # TestIntegrationGithubOrgClient.get_patcher.start()
 
     @classmethod
     def tearDownClass(cls):
         """clear the patcher and remove the test envirionment"""
-        TestIntegrationGithubOrgClient.get_patcher.stop()
+        # TestIntegrationGithubOrgClient.get_patcher.stop()
+        patch.stopall()
+
+    def test_public_repos(self):
+        """Test GithubOrgClient.public_repos"""
+        client = GithubOrgClient("google")
+        result = client.public_repos()
+        self.assertListEqual(result, self.expected_repos)
+
+    def test_public_repos_with_license(self):
+        """Test GithubOrgClient.public_repos with defined license"""
+        client = GithubOrgClient("google")
+        result = client.public_repos(license="apache-2.0")
+        self.assertListEqual(result, self.apache2_repos)
