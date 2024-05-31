@@ -75,10 +75,12 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertTrue(result is expc)
 
 
-@parameterized_class(('org_payload', 'repos_payload',
-                      'expected_repos', 'apache2_repos'),
-                     [(org_payload, repos_payload,
-                       expected_repos, apache2_repos)])
+@parameterized_class(
+    ("org_payload", "repos_payload",
+     "expected_repos", "apache2_repos"),
+    [(org_payload, repos_payload,
+      expected_repos, apache2_repos)]
+)
 class TestIntegrationGithubOrgClient(unittest.TestCase):
     """An intergration test for the GithubOrgClient class"""
     @classmethod
@@ -94,8 +96,9 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             res.json.return_value = org_payload
             return res
 
-        get_patcher = patch("utils.requests.get", side_effect=side_effect)
-        TestIntegrationGithubOrgClient.get_patcher = get_patcher.start()
+        TestIntegrationGithubOrgClient.get_patcher = patch(
+            "requests.get", side_effect=side_effect)
+        TestIntegrationGithubOrgClient.get_patcher.start()
         # TestIntegrationGithubOrgClient.get_patcher.start()
 
     @classmethod
